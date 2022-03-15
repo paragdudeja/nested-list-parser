@@ -6,13 +6,15 @@
 
 int yylex();
 int yyerror();
-bool is_nested = false;
+bool is_nested = false; // Variable to track whether nested list is found
 %}
-
-%token NUMBER 
+/* Tokens */
+%token NUMBER
 %token STRING
 %token NEWLINE
 
+
+/* Associativity */
 %left ','
 %left '[' ']'
 
@@ -29,10 +31,10 @@ Statement   : '[' Expression COMMA ']'  NEWLINE {
                         yyerror();
                     }
                     return 0;
-                }
+                } // Start Statement
             ;
 
-Expression  : Expression ',' Expression
+Expression  : Expression ',' Expression 
 
             | '[' Expression COMMA ']' { is_nested = true; }
 
@@ -42,11 +44,11 @@ Expression  : Expression ',' Expression
 
             | STRING
 
-            ;
+            ; // Elements in the list
 
 COMMA       : ','
             |
-            ;
+            ; // Optional comma after the last item in list
 
 %%
 

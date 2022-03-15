@@ -510,7 +510,7 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    24,    24,    35,    37,    39,    41,    43,    47,    48
+       0,    26,    26,    37,    39,    41,    43,    45,    49,    50
 };
 #endif
 
@@ -1300,7 +1300,7 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 24 "code.y"
+#line 26 "code.y"
                                                 {
                     if(is_nested) {
                         printf("\nEntered statement is a VALID NESTED LIST example in Python\n\n");
@@ -1314,13 +1314,13 @@ yyreduce:
     break;
 
   case 4:
-#line 37 "code.y"
+#line 39 "code.y"
                                        { is_nested = true; }
 #line 1320 "y.tab.c"
     break;
 
   case 5:
-#line 39 "code.y"
+#line 41 "code.y"
                       { is_nested = true; }
 #line 1326 "y.tab.c"
     break;
@@ -1558,7 +1558,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 51 "code.y"
+#line 53 "code.y"
 
 
 //driver code

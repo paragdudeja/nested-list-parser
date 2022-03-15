@@ -75,7 +75,7 @@
 
 int yylex();
 int yyerror();
-bool is_nested = false;
+bool is_nested = false; // Variable to track whether nested list is found
 
 #line 81 "y.tab.c"
 

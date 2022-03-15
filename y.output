@@ -1,0 +1,190 @@
+Grammar
+
+    0 $accept: Statement $end
+
+    1 Statement: '[' Expression COMMA ']' NEWLINE
+
+    2 Expression: Expression ',' Expression
+    3           | '[' Expression COMMA ']'
+    4           | '[' ']'
+    5           | NUMBER
+    6           | STRING
+
+    7 COMMA: ','
+    8      | %empty
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    ',' (44) 2 7
+    '[' (91) 1 3 4
+    ']' (93) 1 3 4
+    error (256)
+    NUMBER (258) 5
+    STRING (259) 6
+    NEWLINE (260) 1
+
+
+Nonterminals, with rules where they appear
+
+    $accept (9)
+        on left: 0
+    Statement (10)
+        on left: 1
+        on right: 0
+    Expression (11)
+        on left: 2 3 4 5 6
+        on right: 1 2 3
+    COMMA (12)
+        on left: 7 8
+        on right: 1 3
+
+
+State 0
+
+    0 $accept: . Statement $end
+
+    '['  shift, and go to state 1
+
+    Statement  go to state 2
+
+
+State 1
+
+    1 Statement: '[' . Expression COMMA ']' NEWLINE
+
+    NUMBER  shift, and go to state 3
+    STRING  shift, and go to state 4
+    '['     shift, and go to state 5
+
+    Expression  go to state 6
+
+
+State 2
+
+    0 $accept: Statement . $end
+
+    $end  shift, and go to state 7
+
+
+State 3
+
+    5 Expression: NUMBER .
+
+    $default  reduce using rule 5 (Expression)
+
+
+State 4
+
+    6 Expression: STRING .
+
+    $default  reduce using rule 6 (Expression)
+
+
+State 5
+
+    3 Expression: '[' . Expression COMMA ']'
+    4           | '[' . ']'
+
+    NUMBER  shift, and go to state 3
+    STRING  shift, and go to state 4
+    '['     shift, and go to state 5
+    ']'     shift, and go to state 8
+
+    Expression  go to state 9
+
+
+State 6
+
+    1 Statement: '[' Expression . COMMA ']' NEWLINE
+    2 Expression: Expression . ',' Expression
+
+    ','  shift, and go to state 10
+
+    $default  reduce using rule 8 (COMMA)
+
+    COMMA  go to state 11
+
+
+State 7
+
+    0 $accept: Statement $end .
+
+    $default  accept
+
+
+State 8
+
+    4 Expression: '[' ']' .
+
+    $default  reduce using rule 4 (Expression)
+
+
+State 9
+
+    2 Expression: Expression . ',' Expression
+    3           | '[' Expression . COMMA ']'
+
+    ','  shift, and go to state 10
+
+    $default  reduce using rule 8 (COMMA)
+
+    COMMA  go to state 12
+
+
+State 10
+
+    2 Expression: Expression ',' . Expression
+    7 COMMA: ',' .
+
+    NUMBER  shift, and go to state 3
+    STRING  shift, and go to state 4
+    '['     shift, and go to state 5
+
+    $default  reduce using rule 7 (COMMA)
+
+    Expression  go to state 13
+
+
+State 11
+
+    1 Statement: '[' Expression COMMA . ']' NEWLINE
+
+    ']'  shift, and go to state 14
+
+
+State 12
+
+    3 Expression: '[' Expression COMMA . ']'
+
+    ']'  shift, and go to state 15
+
+
+State 13
+
+    2 Expression: Expression . ',' Expression
+    2           | Expression ',' Expression .
+
+    $default  reduce using rule 2 (Expression)
+
+
+State 14
+
+    1 Statement: '[' Expression COMMA ']' . NEWLINE
+
+    NEWLINE  shift, and go to state 16
+
+
+State 15
+
+    3 Expression: '[' Expression COMMA ']' .
+
+    $default  reduce using rule 3 (Expression)
+
+
+State 16
+
+    1 Statement: '[' Expression COMMA ']' NEWLINE .
+
+    $default  reduce using rule 1 (Statement)

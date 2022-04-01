@@ -2,189 +2,214 @@ Grammar
 
     0 $accept: Statement $end
 
-    1 Statement: '[' Expression COMMA ']' NEWLINE
+    1 Statement: ListExpression NEWLINE
 
-    2 Expression: Expression ',' Expression
-    3           | '[' Expression COMMA ']'
-    4           | '[' ']'
-    5           | NUMBER
-    6           | STRING
+    2 ListExpression: OPENING_BRACKET Expression Tail CLOSING_BRACKET
 
-    7 COMMA: ','
-    8      | %empty
+    3 Expression: Expression COMMA Expression
+    4           | OPENING_BRACKET Expression Tail CLOSING_BRACKET
+    5           | OPENING_BRACKET CLOSING_BRACKET
+    6           | NUMBER
+    7           | SINGLE_QUOTED_STRING
+    8           | DOUBLE_QUOTED_STRING
+
+    9 Tail: COMMA
+   10     | %empty
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
-    ',' (44) 2 7
-    '[' (91) 1 3 4
-    ']' (93) 1 3 4
     error (256)
-    NUMBER (258) 5
-    STRING (259) 6
-    NEWLINE (260) 1
+    NUMBER (258) 6
+    SINGLE_QUOTED_STRING (259) 7
+    DOUBLE_QUOTED_STRING (260) 8
+    NEWLINE (261) 1
+    OPENING_BRACKET (262) 2 4 5
+    CLOSING_BRACKET (263) 2 4 5
+    COMMA (264) 3 9
 
 
 Nonterminals, with rules where they appear
 
-    $accept (9)
+    $accept (10)
         on left: 0
-    Statement (10)
+    Statement (11)
         on left: 1
         on right: 0
-    Expression (11)
-        on left: 2 3 4 5 6
-        on right: 1 2 3
-    COMMA (12)
-        on left: 7 8
-        on right: 1 3
+    ListExpression (12)
+        on left: 2
+        on right: 1
+    Expression (13)
+        on left: 3 4 5 6 7 8
+        on right: 2 3 4
+    Tail (14)
+        on left: 9 10
+        on right: 2 4
 
 
 State 0
 
     0 $accept: . Statement $end
 
-    '['  shift, and go to state 1
+    OPENING_BRACKET  shift, and go to state 1
 
-    Statement  go to state 2
+    Statement       go to state 2
+    ListExpression  go to state 3
 
 
 State 1
 
-    1 Statement: '[' . Expression COMMA ']' NEWLINE
+    2 ListExpression: OPENING_BRACKET . Expression Tail CLOSING_BRACKET
 
-    NUMBER  shift, and go to state 3
-    STRING  shift, and go to state 4
-    '['     shift, and go to state 5
+    NUMBER                shift, and go to state 4
+    SINGLE_QUOTED_STRING  shift, and go to state 5
+    DOUBLE_QUOTED_STRING  shift, and go to state 6
+    OPENING_BRACKET       shift, and go to state 7
 
-    Expression  go to state 6
+    Expression  go to state 8
 
 
 State 2
 
     0 $accept: Statement . $end
 
-    $end  shift, and go to state 7
+    $end  shift, and go to state 9
 
 
 State 3
 
-    5 Expression: NUMBER .
+    1 Statement: ListExpression . NEWLINE
 
-    $default  reduce using rule 5 (Expression)
+    NEWLINE  shift, and go to state 10
 
 
 State 4
 
-    6 Expression: STRING .
+    6 Expression: NUMBER .
 
     $default  reduce using rule 6 (Expression)
 
 
 State 5
 
-    3 Expression: '[' . Expression COMMA ']'
-    4           | '[' . ']'
+    7 Expression: SINGLE_QUOTED_STRING .
 
-    NUMBER  shift, and go to state 3
-    STRING  shift, and go to state 4
-    '['     shift, and go to state 5
-    ']'     shift, and go to state 8
-
-    Expression  go to state 9
+    $default  reduce using rule 7 (Expression)
 
 
 State 6
 
-    1 Statement: '[' Expression . COMMA ']' NEWLINE
-    2 Expression: Expression . ',' Expression
+    8 Expression: DOUBLE_QUOTED_STRING .
 
-    ','  shift, and go to state 10
-
-    $default  reduce using rule 8 (COMMA)
-
-    COMMA  go to state 11
+    $default  reduce using rule 8 (Expression)
 
 
 State 7
+
+    4 Expression: OPENING_BRACKET . Expression Tail CLOSING_BRACKET
+    5           | OPENING_BRACKET . CLOSING_BRACKET
+
+    NUMBER                shift, and go to state 4
+    SINGLE_QUOTED_STRING  shift, and go to state 5
+    DOUBLE_QUOTED_STRING  shift, and go to state 6
+    OPENING_BRACKET       shift, and go to state 7
+    CLOSING_BRACKET       shift, and go to state 11
+
+    Expression  go to state 12
+
+
+State 8
+
+    2 ListExpression: OPENING_BRACKET Expression . Tail CLOSING_BRACKET
+    3 Expression: Expression . COMMA Expression
+
+    COMMA  shift, and go to state 13
+
+    $default  reduce using rule 10 (Tail)
+
+    Tail  go to state 14
+
+
+State 9
 
     0 $accept: Statement $end .
 
     $default  accept
 
 
-State 8
-
-    4 Expression: '[' ']' .
-
-    $default  reduce using rule 4 (Expression)
-
-
-State 9
-
-    2 Expression: Expression . ',' Expression
-    3           | '[' Expression . COMMA ']'
-
-    ','  shift, and go to state 10
-
-    $default  reduce using rule 8 (COMMA)
-
-    COMMA  go to state 12
-
-
 State 10
 
-    2 Expression: Expression ',' . Expression
-    7 COMMA: ',' .
+    1 Statement: ListExpression NEWLINE .
 
-    NUMBER  shift, and go to state 3
-    STRING  shift, and go to state 4
-    '['     shift, and go to state 5
-
-    $default  reduce using rule 7 (COMMA)
-
-    Expression  go to state 13
+    $default  reduce using rule 1 (Statement)
 
 
 State 11
 
-    1 Statement: '[' Expression COMMA . ']' NEWLINE
+    5 Expression: OPENING_BRACKET CLOSING_BRACKET .
 
-    ']'  shift, and go to state 14
+    $default  reduce using rule 5 (Expression)
 
 
 State 12
 
-    3 Expression: '[' Expression COMMA . ']'
+    3 Expression: Expression . COMMA Expression
+    4           | OPENING_BRACKET Expression . Tail CLOSING_BRACKET
 
-    ']'  shift, and go to state 15
+    COMMA  shift, and go to state 13
+
+    $default  reduce using rule 10 (Tail)
+
+    Tail  go to state 15
 
 
 State 13
 
-    2 Expression: Expression . ',' Expression
-    2           | Expression ',' Expression .
+    3 Expression: Expression COMMA . Expression
+    9 Tail: COMMA .
 
-    $default  reduce using rule 2 (Expression)
+    NUMBER                shift, and go to state 4
+    SINGLE_QUOTED_STRING  shift, and go to state 5
+    DOUBLE_QUOTED_STRING  shift, and go to state 6
+    OPENING_BRACKET       shift, and go to state 7
+
+    $default  reduce using rule 9 (Tail)
+
+    Expression  go to state 16
 
 
 State 14
 
-    1 Statement: '[' Expression COMMA ']' . NEWLINE
+    2 ListExpression: OPENING_BRACKET Expression Tail . CLOSING_BRACKET
 
-    NEWLINE  shift, and go to state 16
+    CLOSING_BRACKET  shift, and go to state 17
 
 
 State 15
 
-    3 Expression: '[' Expression COMMA ']' .
+    4 Expression: OPENING_BRACKET Expression Tail . CLOSING_BRACKET
 
-    $default  reduce using rule 3 (Expression)
+    CLOSING_BRACKET  shift, and go to state 18
 
 
 State 16
 
-    1 Statement: '[' Expression COMMA ']' NEWLINE .
+    3 Expression: Expression . COMMA Expression
+    3           | Expression COMMA Expression .
 
-    $default  reduce using rule 1 (Statement)
+    $default  reduce using rule 3 (Expression)
+
+
+State 17
+
+    2 ListExpression: OPENING_BRACKET Expression Tail CLOSING_BRACKET .
+
+    $default  reduce using rule 2 (ListExpression)
+
+
+State 18
+
+    4 Expression: OPENING_BRACKET Expression Tail CLOSING_BRACKET .
+
+    $default  reduce using rule 4 (Expression)

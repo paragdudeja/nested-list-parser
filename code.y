@@ -8,45 +8,47 @@ int yylex();
 int yyerror();
 bool is_nested = false; // Variable to track whether nested list is found
 %}
+
 /* Tokens */
 %token NUMBER
-%token STRING
+%token SINGLE_QUOTED_STRING
+%token DOUBLE_QUOTED_STRING
 %token NEWLINE
-
+%token OPENING_BRACKET
+%token CLOSING_BRACKET
 
 /* Associativity */
-%left ','
-%left '[' ']'
+%left COMMA
+%left OPENING_BRACKET CLOSING_BRACKET
 
 %start Statement
 
 /* Rule Section */
 %%
 
-Statement   : '[' Expression COMMA ']'  NEWLINE {
-                    if(is_nested) {
-                        printf("\nEntered statement is a VALID NESTED LIST example in Python\n\n");
+Statement       : ListExpression NEWLINE {
+                        if(is_nested) {
+                            printf("\nEntered statement is a VALID EXAMPLE OF NESTED LIST in Python\n\n");
+                        }
+                        else {
+                            yyerror();
+                        }
+                        return 0;
                     }
-                    else {
-                        yyerror();
-                    }
-                    return 0;
-                } // Start Statement
-            ;
+                ; // Starting statement
 
-Expression  : Expression ',' Expression 
+ListExpression  : OPENING_BRACKET Expression Tail CLOSING_BRACKET
+                ; // General syntax of list in Python
 
-            | '[' Expression COMMA ']' { is_nested = true; }
+Expression      : Expression COMMA Expression 
+                | OPENING_BRACKET Expression Tail CLOSING_BRACKET { is_nested = true; }
+                | OPENING_BRACKET CLOSING_BRACKET { is_nested = true; }
+                | NUMBER
+                | SINGLE_QUOTED_STRING
+                | DOUBLE_QUOTED_STRING
+                ; // Elements in the list
 
-            | '[' ']' { is_nested = true; }
-
-            | NUMBER
-
-            | STRING
-
-            ; // Elements in the list
-
-COMMA       : ','
+Tail        : COMMA
             |
             ; // Optional comma after the last item in list
 
@@ -61,5 +63,5 @@ void main()
 
 int yyerror(char *msg)
 {
-   printf("\nNOT A VALID NESTED LIST example in Python...\n\n");
+   printf("\nNOT A VALID EXAMPLE OF NESTED LIST in Python...\n\n");
 }

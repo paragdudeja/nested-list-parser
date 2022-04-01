@@ -50,14 +50,22 @@ extern int yydebug;
   enum yytokentype
   {
     NUMBER = 258,
-    STRING = 259,
-    NEWLINE = 260
+    SINGLE_QUOTED_STRING = 259,
+    DOUBLE_QUOTED_STRING = 260,
+    NEWLINE = 261,
+    OPENING_BRACKET = 262,
+    CLOSING_BRACKET = 263,
+    COMMA = 264
   };
 #endif
 /* Tokens.  */
 #define NUMBER 258
-#define STRING 259
-#define NEWLINE 260
+#define SINGLE_QUOTED_STRING 259
+#define DOUBLE_QUOTED_STRING 260
+#define NEWLINE 261
+#define OPENING_BRACKET 262
+#define CLOSING_BRACKET 263
+#define COMMA 264
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

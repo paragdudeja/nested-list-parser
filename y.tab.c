@@ -126,14 +126,22 @@ extern int yydebug;
   enum yytokentype
   {
     NUMBER = 258,
-    STRING = 259,
-    NEWLINE = 260
+    SINGLE_QUOTED_STRING = 259,
+    DOUBLE_QUOTED_STRING = 260,
+    NEWLINE = 261,
+    OPENING_BRACKET = 262,
+    CLOSING_BRACKET = 263,
+    COMMA = 264
   };
 #endif
 /* Tokens.  */
 #define NUMBER 258
-#define STRING 259
-#define NEWLINE 260
+#define SINGLE_QUOTED_STRING 259
+#define DOUBLE_QUOTED_STRING 260
+#define NEWLINE 261
+#define OPENING_BRACKET 262
+#define CLOSING_BRACKET 263
+#define COMMA 264
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -451,21 +459,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  7
+#define YYFINAL  9
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   16
+#define YYLAST   17
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  9
+#define YYNTOKENS  10
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  9
+#define YYNRULES  11
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  17
+#define YYNSTATES  19
 
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   260
+#define YYMAXUTOK   264
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -481,12 +489,12 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     6,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     7,     2,     8,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -503,14 +511,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5
+       5,     6,     7,     8,     9
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    26,    26,    37,    39,    41,    43,    45,    49,    50
+       0,    29,    29,    40,    43,    44,    45,    46,    47,    48,
+      51,    52
 };
 #endif
 
@@ -519,8 +528,9 @@ static const yytype_int8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "NUMBER", "STRING", "NEWLINE", "','",
-  "'['", "']'", "$accept", "Statement", "Expression", "COMMA", YY_NULLPTR
+  "$end", "error", "$undefined", "NUMBER", "SINGLE_QUOTED_STRING",
+  "DOUBLE_QUOTED_STRING", "NEWLINE", "OPENING_BRACKET", "CLOSING_BRACKET",
+  "COMMA", "$accept", "Statement", "ListExpression", "Expression", "Tail", YY_NULLPTR
 };
 #endif
 
@@ -529,11 +539,11 @@ static const char *const yytname[] =
    (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_int16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,    44,    91,    93
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264
 };
 # endif
 
-#define YYPACT_NINF (-6)
+#define YYPACT_NINF (-8)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -547,8 +557,8 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -5,     3,     9,    -6,    -6,    -3,     5,    -6,    -6,     5,
-       3,     4,     6,    -6,     8,    -6,    -6
+      -6,     6,     2,     8,    -8,    -8,    -8,     0,     3,    -8,
+      -8,    -8,     3,     6,     7,     9,    -8,    -8,    -8
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -556,20 +566,20 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     6,     7,     0,     9,     1,     5,     9,
-       8,     0,     0,     3,     0,     4,     2
+       0,     0,     0,     0,     7,     8,     9,     0,    11,     1,
+       2,     6,    11,    10,     0,     0,     4,     3,     5
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -6,    -6,    -2,     7
+      -8,    -8,    -8,    -7,     4
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     6,    11
+      -1,     2,     3,     8,    14
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -577,34 +587,36 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       3,     4,     1,     9,     5,     8,     3,     4,    13,     7,
-       5,    10,    14,    16,    15,     0,    12
+      12,     1,     9,     4,     5,     6,    16,     7,    11,     4,
+       5,     6,    13,     7,    10,    17,    15,    18
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     4,     7,     5,     7,     8,     3,     4,    10,     0,
-       7,     6,     8,     5,     8,    -1,     9
+       7,     7,     0,     3,     4,     5,    13,     7,     8,     3,
+       4,     5,     9,     7,     6,     8,    12,     8
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     7,    10,     3,     4,     7,    11,     0,     8,    11,
-       6,    12,    12,    11,     8,     8,     5
+       0,     7,    11,    12,     3,     4,     5,     7,    13,     0,
+       6,     8,    13,     9,    14,    14,    13,     8,     8
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,     9,    10,    11,    11,    11,    11,    11,    12,    12
+       0,    10,    11,    12,    13,    13,    13,    13,    13,    13,
+      14,    14
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     5,     3,     4,     2,     1,     1,     1,     0
+       0,     2,     2,     4,     3,     4,     2,     1,     1,     1,
+       1,     0
 };
 
 
@@ -1300,33 +1312,33 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 26 "code.y"
-                                                {
-                    if(is_nested) {
-                        printf("\nEntered statement is a VALID NESTED LIST example in Python\n\n");
+#line 29 "code.y"
+                                         {
+                        if(is_nested) {
+                            printf("\nEntered statement is a VALID EXAMPLE OF NESTED LIST in Python\n\n");
+                        }
+                        else {
+                            yyerror();
+                        }
+                        return 0;
                     }
-                    else {
-                        yyerror();
-                    }
-                    return 0;
-                }
-#line 1314 "y.tab.c"
-    break;
-
-  case 4:
-#line 39 "code.y"
-                                       { is_nested = true; }
-#line 1320 "y.tab.c"
-    break;
-
-  case 5:
-#line 41 "code.y"
-                      { is_nested = true; }
 #line 1326 "y.tab.c"
     break;
 
+  case 5:
+#line 44 "code.y"
+                                                                  { is_nested = true; }
+#line 1332 "y.tab.c"
+    break;
 
-#line 1330 "y.tab.c"
+  case 6:
+#line 45 "code.y"
+                                                  { is_nested = true; }
+#line 1338 "y.tab.c"
+    break;
+
+
+#line 1342 "y.tab.c"
 
       default: break;
     }
@@ -1558,7 +1570,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 53 "code.y"
+#line 55 "code.y"
 
 
 //driver code
@@ -1570,5 +1582,5 @@ void main()
 
 int yyerror(char *msg)
 {
-   printf("\nNOT A VALID NESTED LIST example in Python...\n\n");
+   printf("\nNOT A VALID EXAMPLE OF NESTED LIST in Python...\n\n");
 }

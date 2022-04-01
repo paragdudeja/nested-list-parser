@@ -25,9 +25,9 @@ Terminals, with rules where they appear
     SINGLE_QUOTED_STRING (259) 7
     DOUBLE_QUOTED_STRING (260) 8
     NEWLINE (261) 1
-    OPENING_BRACKET (262) 2 4 5
-    CLOSING_BRACKET (263) 2 4 5
-    COMMA (264) 3 9
+    COMMA (262) 3 9
+    OPENING_BRACKET (263) 2 4 5
+    CLOSING_BRACKET (264) 2 4 5
 
 
 Nonterminals, with rules where they appear

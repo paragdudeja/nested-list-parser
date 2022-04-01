@@ -53,9 +53,9 @@ extern int yydebug;
     SINGLE_QUOTED_STRING = 259,
     DOUBLE_QUOTED_STRING = 260,
     NEWLINE = 261,
-    OPENING_BRACKET = 262,
-    CLOSING_BRACKET = 263,
-    COMMA = 264
+    COMMA = 262,
+    OPENING_BRACKET = 263,
+    CLOSING_BRACKET = 264
   };
 #endif
 /* Tokens.  */
@@ -63,9 +63,9 @@ extern int yydebug;
 #define SINGLE_QUOTED_STRING 259
 #define DOUBLE_QUOTED_STRING 260
 #define NEWLINE 261
-#define OPENING_BRACKET 262
-#define CLOSING_BRACKET 263
-#define COMMA 264
+#define COMMA 262
+#define OPENING_BRACKET 263
+#define CLOSING_BRACKET 264
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

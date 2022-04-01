@@ -14,9 +14,6 @@ bool is_nested = false; // Variable to track whether nested list is found
 %token SINGLE_QUOTED_STRING
 %token DOUBLE_QUOTED_STRING
 %token NEWLINE
-%token OPENING_BRACKET
-%token CLOSING_BRACKET
-%token COMMA
 
 /* Associativity */
 %left COMMA
@@ -38,8 +35,10 @@ Statement       : ListExpression NEWLINE {
                     }
                 ; // Starting statement
 
+
 ListExpression  : OPENING_BRACKET Expression Tail CLOSING_BRACKET
                 ; // General syntax of list in Python
+
 
 Expression      : Expression COMMA Expression 
                 | OPENING_BRACKET Expression Tail CLOSING_BRACKET { is_nested = true; }
@@ -49,9 +48,10 @@ Expression      : Expression COMMA Expression
                 | DOUBLE_QUOTED_STRING
                 ; // Elements in the list
 
-Tail        : COMMA
-            |
-            ; // Optional comma after the last item in list
+
+Tail            : COMMA
+                |
+                ; // Optional comma after the last item in list
 
 %%
 

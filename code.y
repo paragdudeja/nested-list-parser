@@ -16,6 +16,7 @@ bool is_nested = false; // Variable to track whether nested list is found
 %token NEWLINE
 %token OPENING_BRACKET
 %token CLOSING_BRACKET
+%token COMMA
 
 /* Associativity */
 %left COMMA
